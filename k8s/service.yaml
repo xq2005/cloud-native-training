@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: qing-xu-go-http-server
+    app.kubernetes.io/instance: qing-xu-go-http-server
+    app.kubernetes.io/name: qing-xu-go-http-server
+  name: qing-xu-go-http-server
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 7777
+  selector:
+    app.kubernetes.io/instance: qing-xu-go-http-server
+    app.kubernetes.io/name: qing-xu-go-http-server
+  sessionAffinity: None
+  type: ClusterIP

@@ -53,19 +53,26 @@ func main() {
 
 func handler(w http.ResponseWriter, r *http.Request) {
   var ns Nums
-  if err := json.NewDecoder(r.Body).Decode(&ns); err != nil {
-    r.Body.Close()
-    log.Fatal(err)
-  }
+  switch r.Method {
+  case "POST":
+    if err := json.NewDecoder(r.Body).Decode(&ns); err != nil {
+      r.Body.Close()
+      log.Fatal(err)
+    }
 
-  var result int
-  switch cal_method {
-  case "add":
-    result = add(ns.N1, ns.N2)
-  case "minus":
-    result = minus(ns.N1, ns.N2)
-  case "mul":
-    result = mul(ns.N1, ns.N2)
+    var result int
+    switch cal_method {
+    case "add":
+      result = add(ns.N1, ns.N2)
+    case "minus":
+      result = minus(ns.N1, ns.N2)
+    case "mul":
+      result = mul(ns.N1, ns.N2)
+    }
+    fmt.Fprintln(w, "the result is :" + strconv.Itoa(result))
+  case "GET":
+    fmt.Fprintln(w, "Hello.")
+  default:
+    fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
   }
-  fmt.Fprintln(w, "the result is :" + strconv.Itoa(result))
 }
